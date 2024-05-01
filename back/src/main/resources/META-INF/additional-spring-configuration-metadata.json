@@ -1,0 +1,20 @@
+{
+    "properties": [
+      {
+        "name": "jwt.secret",
+        "type": "java.lang.String",
+        "description": "A key used to sign and verify JWT tokens."
+      },
+      {
+        "name": "jwt.expiration",
+        "type": "java.lang.String",
+        "description": "An expiration value for JWT tokens."
+      },
+      {
+        "name": "client.url",
+        "type": "java.lang.String",
+        "description": "The base URL for client interactions."
+      }
+    ]
+  }
+  
