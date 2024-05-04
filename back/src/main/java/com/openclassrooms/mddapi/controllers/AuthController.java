@@ -1,6 +1,5 @@
 package com.openclassrooms.mddapi.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,15 +14,18 @@ import com.openclassrooms.mddapi.services.UserService;
 @RestController
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
-        * Registers a new user.
-        *
-        * @param userRegistrationDTO The user registration data.
-        * @return The response entity containing the user response DTO.
-        */
+    * Registers a new user.
+    *
+    * @param userRegistrationDTO The user registration data.
+    * @return The response entity containing the user response DTO.
+    */
     @PostMapping("/auth/register")
     public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {        
         User user = UserMapper.INSTANCE.userDtoToUser(userRegistrationDTO); 

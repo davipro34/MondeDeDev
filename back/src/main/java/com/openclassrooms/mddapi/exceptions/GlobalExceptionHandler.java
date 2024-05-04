@@ -8,14 +8,29 @@ import java.util.stream.Collectors;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 
+/**
+ * This class is a controller advice that handles global exceptions thrown by the application.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles the EmailExistsException and returns a ResponseEntity with the error message.
+     *
+     * @param e The EmailExistsException to handle.
+     * @return A ResponseEntity with the error message and HTTP status code.
+     */
     @ExceptionHandler(EmailExistsException.class)
     public ResponseEntity<String> handleEmailExistsException(EmailExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
+    /**
+     * Handles MethodArgumentNotValidException and returns a ResponseEntity containing a list of validation errors.
+     *
+     * @param ex The MethodArgumentNotValidException to handle.
+     * @return A ResponseEntity containing a list of validation errors.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getAllErrors()
@@ -23,5 +38,16 @@ public class GlobalExceptionHandler {
             .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
             .collect(Collectors.toList());
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    /**
+     * Handles the IllegalArgumentException and returns a ResponseEntity with a bad request status code and the error message.
+     *
+     * @param e The IllegalArgumentException that was thrown
+     * @return A ResponseEntity with a bad request status code and the error message
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

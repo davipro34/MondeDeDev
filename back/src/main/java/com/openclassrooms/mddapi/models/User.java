@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,27 +28,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * The first name of the user.
-     */
+    @NotBlank(message = "First name cannot be empty")
+    @Size(max = 40, message = "First name cannot exceed 40 characters")
     @Column(nullable = false)
     private String firstName;
 
-    /**
-     * The last name of the user.
-     */
+    @NotBlank(message = "Last name cannot be empty")
+    @Size(max = 40, message = "Last name cannot exceed 40 characters")
     @Column(nullable = false)
     private String lastName;
 
-    /**
-     * The email address of the user.
-     */
+    @NotBlank(message = "Email cannot be empty")
+    @Size(max = 255, message = "Email cannot exceed 255 characters")
+    @Email(message = "Email should be valid")
     @Column(nullable = false, unique = true)
     private String email;
 
-    /**
-     * The password of the user.
-     */
+    @NotBlank(message = "Password cannot be empty")
+    @Size(max = 255, message = "Password cannot exceed 255 characters")
     @Column(nullable = false)
     private String password;
 }
