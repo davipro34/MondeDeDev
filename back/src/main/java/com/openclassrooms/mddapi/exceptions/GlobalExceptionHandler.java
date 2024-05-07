@@ -1,6 +1,8 @@
 package com.openclassrooms.mddapi.exceptions;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.FieldError;
@@ -49,5 +51,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    /**
+     * Handles the UsernameNotFoundException and returns a ResponseEntity with the error message.
+     *
+     * @param e The UsernameNotFoundException to handle.
+     * @return A ResponseEntity with the error message and HTTP status code.
+     */
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    /**
+     * Handles the BadCredentialsException and returns a ResponseEntity with the error message.
+     *
+     * @param e The BadCredentialsException to handle.
+     * @return A ResponseEntity with the error message and HTTP status code.
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 }

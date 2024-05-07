@@ -6,16 +6,9 @@ import com.openclassrooms.mddapi.models.User;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
-
-    /**
-     * The UserMapper interface is responsible for mapping User entities to UserDTOs and vice versa.
-     * It provides methods for converting User objects to UserDTO objects and vice versa.
-     */
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     /**
      * Converts a UserRegistrationDTO object to a User object.
