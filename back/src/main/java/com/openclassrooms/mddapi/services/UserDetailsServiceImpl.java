@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 /**
-* Implementation of the UserDetailsService interface that loads user details by username.
-*/
+ * Implementation of the UserDetailsService interface that loads user details by username.
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
@@ -22,12 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     /**
-    * Loads the user details by username.
-    *
-    * @param username the username of the user
-    * @return the user details for the given username
-    * @throws UsernameNotFoundException if the user is not found
-    */
+     * Loads the user details by username.
+     *
+     * @param username the username of the user
+     * @return the user details for the given username
+     * @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(username);
@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .authorities(new ArrayList<>())
                     .build();
         } else {
-            throw new UsernameNotFoundException("User not found");
+             throw new UsernameNotFoundException("User not found");
         }
     }
 }

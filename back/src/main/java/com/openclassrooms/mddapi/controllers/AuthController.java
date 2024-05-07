@@ -38,11 +38,11 @@ public class AuthController {
     }
 
     /**
-        * Registers a new user.
-        *
-        * @param userRegistrationDTO The user registration data.
-        * @return The response entity containing the user response DTO.
-        */
+     * Registers a new user.
+     *
+     * @param userRegistrationDTO The user registration data.
+     * @return The response entity containing the user response DTO.
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/auth/register")
@@ -54,22 +54,18 @@ public class AuthController {
     }
 
     /**
-        * Authenticates a user and generates a JWT token.
-        *
-        * @param loginDTO The login credentials of the user.
-        * @return A ResponseEntity containing the generated token.
-        */
+     * Authenticates a user and generates a JWT token.
+     *
+     * @param loginDTO The login credentials of the user.
+     * @return A ResponseEntity containing the generated token.
+     */
     @PostMapping("/auth/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginDTO loginDTO) {
-        try {
-            Authentication authentication = userService.authenticate(loginDTO);
-            String token = jwtService.generateToken(authentication);
-            TokenResponseDTO tokenResponseDTO = tokenMapper.tokenToTokenResponseDTO(token);
-            return ResponseEntity.ok(tokenResponseDTO);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginDTO loginDTO) throws AuthenticationException {
+        Authentication authentication = userService.authenticate(loginDTO);
+        String token = jwtService.generateToken(authentication);
+        TokenResponseDTO tokenResponseDTO = tokenMapper.tokenToTokenResponseDTO(token);
+        return ResponseEntity.ok(tokenResponseDTO);
     }
 }

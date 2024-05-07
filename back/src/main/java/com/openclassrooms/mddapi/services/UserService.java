@@ -102,25 +102,21 @@ public class UserService {
     }
 
     /**
-    * Authenticates the user with the provided login credentials.
-    *
-    * @param loginDTO The login data transfer object containing the user's email and password.
-    * @return The authenticated user.
-    * @throws UsernameNotFoundException If the email or username is invalid.
-    * @throws BadCredentialsException If the password is invalid.
-    */
+     * Authenticates the user with the provided login credentials.
+     *
+     * @param loginDTO The login data transfer object containing the user's email and password.
+     * @return The authenticated user.
+     * @throws UsernameNotFoundException If the email or username is invalid.
+     * @throws BadCredentialsException If the password is invalid.
+     */
     public Authentication authenticate(LoginDTO loginDTO) {
-        Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid email or username");
-        }
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid password");
+            throw new BadCredentialsException("Authentication failed: " + e.getMessage());
         }
     }
 }
