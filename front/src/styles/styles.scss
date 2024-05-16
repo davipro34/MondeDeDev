@@ -2,3 +2,17 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.flex {
+    --direction: row;
+    --justify: normal;
+    --gap: 1rem;
+    display: flex;
+    gap: var(--gap);
+    flex-direction: var(--direction);
+    justify-content: var(--justify);
+}
+  
+.flex-col {
+    --direction: column;
+}
