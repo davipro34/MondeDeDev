@@ -22,23 +22,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     /**
-     * Loads the user details by username.
+     * Loads the user details by username or email.
      *
-     * @param username the username of the user
-     * @return the user details for the given username
+     * @param usernameOrEmail the username or email of the user
+     * @return the user details for the given username or email
      * @throws UsernameNotFoundException if the user is not found
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+            String identifier;
+            if (user.getUsername() != null) {
+                identifier = user.getUsername();
+            } else {
+                identifier = user.getEmail();
+            }
+            return org.springframework.security.core.userdetails.User.withUsername(identifier)
                     .password(user.getPassword())
                     .authorities(new ArrayList<>())
                     .build();
         } else {
-             throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found");
         }
     }
 }
