@@ -118,6 +118,7 @@ public class UserService {
      */
     public Authentication authenticate(LoginDTO loginDTO) {
         try {
+            System.out.println(loginDTO.getUsernameOrEmail() + " "+loginDTO.getPassword() );
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
