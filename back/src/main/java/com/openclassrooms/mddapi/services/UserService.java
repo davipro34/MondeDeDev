@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.dtos.LoginDTO;
 import com.openclassrooms.mddapi.exceptions.EmailExistsException;
+import com.openclassrooms.mddapi.exceptions.UsernameExistsException;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 
@@ -67,17 +68,24 @@ public class UserService {
      * @param user The user to be saved.
      * @return The saved user.
      * @throws EmailExistsException If a user with the same email already exists.
+     * @throws UsernameExistsException If a user with the same username already exists.
      * @throws IllegalArgumentException If the password does not meet the complexity requirements.
      */
     public User saveUser(User user) {
         try {
             validateUser(user);
             validatePasswordComplexity(user.getPassword());
+            if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+                throw new UsernameExistsException("A user with this username already exists.");
+            }
+            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                throw new EmailExistsException("A user with this email already exists.");
+            }
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword())); // Encode the password before saving
             User savedUser = userRepository.save(user);
             return savedUser;
         } catch (DataIntegrityViolationException e) {
-            throw new EmailExistsException("A user with this email already exists.");
+            throw new RuntimeException("An error occurred while saving the user.");
         }
     }
 
@@ -103,15 +111,16 @@ public class UserService {
     /**
      * Authenticates the user with the provided login credentials.
      *
-     * @param loginDTO The login data transfer object containing the user's email and password.
+     * @param loginDTO The login data transfer object containing the user's login and password.
      * @return The authenticated user.
      * @throws UsernameNotFoundException If the email or username is invalid.
      * @throws BadCredentialsException If the password is invalid.
      */
     public Authentication authenticate(LoginDTO loginDTO) {
         try {
+            System.out.println(loginDTO.getUsernameOrEmail() + " "+loginDTO.getPassword() );
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
         } catch (AuthenticationException e) {

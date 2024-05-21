@@ -1,0 +1,27 @@
+<main class="grid-template-layout relative">
+  <!-- Lien de retour vers la page d'accueil -->
+  <a routerLink="/" class="return-link">
+    <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+  </a>
+  
+  <form (ngSubmit)="onSubmit()">
+    <h2>Se connecter</h2>
+  
+    <mat-form-field appearance="outline">
+    <!-- Champ de saisie pour l'email ou le nom d'utilisateur -->
+    <mat-label>{{labels['usernameOrEmail']}}</mat-label>
+    <input matInput [formControl]="formControls['usernameOrEmail']" (blur)="onBlur('usernameOrEmail')" [attr.autocomplete]="'usernameOrEmail'">
+    <mat-error *ngIf="formControls['usernameOrEmail'].invalid && formControls['usernameOrEmail'].touched">{{errorMessages['usernameOrEmail']}}</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline">
+    <!-- Champ de saisie pour le mot de passe -->
+    <mat-label>{{labels['password']}}</mat-label>
+    <input type="password" matInput [formControl]="formControls['password']" (blur)="onBlur('password')" [attr.autocomplete]="'current-password'">
+    <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
+    </mat-form-field>
+  
+    <!-- Bouton de soumission du formulaire -->
+    <button type="submit" [disabled]="formControls['usernameOrEmail'].invalid || formControls['password'].invalid" mat-raised-button color="primary">Se connecter</button>
+  </form>
+  </main>

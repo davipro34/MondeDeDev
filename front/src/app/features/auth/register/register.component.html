@@ -1,0 +1,34 @@
+<main class="grid-template-layout relative">
+  <!-- Lien de retour vers la page d'accueil -->
+  <a routerLink="/" class="return-link">
+    <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+  </a>
+
+  <form (ngSubmit)="onSubmit()">
+    <h2>Inscription</h2>
+
+    <mat-form-field appearance="outline">
+      <!-- Champ de saisie pour le nom d'utilisateur -->
+      <mat-label>{{labels['username']}}</mat-label>
+      <input matInput [formControl]="formControls['username']" (blur)="onBlur('username')">
+      <mat-error *ngIf="formControls['username'].invalid && formControls['username'].touched">{{errorMessages['username']}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <!-- Champ de saisie pour l'adresse e-mail -->
+      <mat-label>{{labels['email']}}</mat-label>
+      <input type="email" matInput [formControl]="formControls['email']" (blur)="onBlur('email')">
+      <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <!-- Champ de saisie pour le mot de passe -->
+      <mat-label>{{labels['password']}}</mat-label>
+      <input matInput [formControl]="formControls['password']" (blur)="onBlur('password')">
+      <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
+    </mat-form-field>
+
+    <!-- Bouton de soumission du formulaire d'inscription -->
+    <button type="submit" [disabled]="formControls['username'].invalid || formControls['email'].invalid || formControls['password'].invalid" mat-raised-button color="primary">S'inscrire</button>
+  </form>
+</main>

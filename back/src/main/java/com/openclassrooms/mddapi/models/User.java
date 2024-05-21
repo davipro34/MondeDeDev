@@ -28,15 +28,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "First name cannot be empty")
-    @Size(max = 40, message = "First name cannot exceed 40 characters")
-    @Column(nullable = false)
-    private String firstName;
-
-    @NotBlank(message = "Last name cannot be empty")
-    @Size(max = 40, message = "Last name cannot exceed 40 characters")
-    @Column(nullable = false)
-    private String lastName;
+    @NotBlank(message = "Username cannot be empty")
+    @Size(max = 40, message = "Username cannot exceed 40 characters")
+    @Column(nullable = false, unique = true)
+    private String username;
 
     @NotBlank(message = "Email cannot be empty")
     @Size(max = 255, message = "Email cannot exceed 255 characters")

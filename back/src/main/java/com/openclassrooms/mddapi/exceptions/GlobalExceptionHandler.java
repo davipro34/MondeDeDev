@@ -29,6 +29,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles the UsernameExistsException and returns a ResponseEntity with the error message.
+     *
+     * @param e The UsernameExistsException to handle.
+     * @return A ResponseEntity with the error message and HTTP status code.
+     */
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<String> handleUsernameExistsException(UsernameExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    /**
      * Handles MethodArgumentNotValidException and returns a ResponseEntity containing a list of validation errors.
      *
      * @param ex The MethodArgumentNotValidException to handle.

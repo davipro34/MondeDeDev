@@ -1,3 +1,14 @@
+/**
+ * Environnement de production.
+ */
 export const environment = {
-  production: true
+  /**
+   * Indique si l'application est en mode production.
+   */
+  production: true,
+
+  /**
+   * URL de l'API backend.
+   */
+  backEndUrl: 'http://localhost:8080'
 };

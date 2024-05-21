@@ -13,7 +13,7 @@ npm-debug.log
 yarn-error.log
 
 ### Java ###
-application.properties
+#application.properties
 
 # Compiled class file
 *.class

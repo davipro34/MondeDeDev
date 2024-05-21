@@ -1,0 +1,10 @@
+<header class="header-primary">
+  <a routerLink="/" routerLinkActive="active">
+    <img [src]="'/assets/logo_p6.png'" alt="logo" [width]="140" [height]="80" priority/>
+  </a>
+</header>
+<mat-sidenav-container>
+  <mat-sidenav-content class="mat-sidenav-content-wrapper">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
