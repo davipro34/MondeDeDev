@@ -15,35 +15,36 @@ import { AuthService } from './features/auth/services/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './features/auth/interceptors/auth.interceptor';
 import { LoginComponent } from './features/auth/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
-/**
- * Module principal de l'application.
- */
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
-    BrowserModule, // Module pour le navigateur
-    AppRoutingModule, // Module pour le routage
-    BrowserAnimationsModule, // Module pour les animations
-    ReactiveFormsModule, // Module pour les formulaires réactifs
-    MatCardModule, // Module pour les cartes
-    MatButtonModule, // Module pour les boutons
-    MatFormFieldModule, // Module pour les champs de formulaire
-    MatInputModule, // Module pour les champs de saisie
-    MatIcon, // Module pour les icônes
-    FormsModule, // Module pour les formulaires
-    HttpClientModule // Module pour les requêtes HTTP
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIcon,
+    MatSidenavModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'fr'}, // Fournisseur pour la localisation
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, // Fournisseur pour l'intercepteur HTTP
-    AuthService // Service d'authentification
+    { provide: LOCALE_ID, useValue: 'fr'},
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    AuthService
   ],
-  bootstrap: [AppComponent], // Composant racine de l'application
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
