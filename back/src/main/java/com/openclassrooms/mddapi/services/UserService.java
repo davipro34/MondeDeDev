@@ -17,11 +17,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.dtos.LoginDTO;
+import com.openclassrooms.mddapi.dtos.UserDTO;
 import com.openclassrooms.mddapi.exceptions.EmailExistsException;
 import com.openclassrooms.mddapi.exceptions.UsernameExistsException;
+import com.openclassrooms.mddapi.mappers.UserMapper;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -38,11 +41,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationManager = authenticationManager;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -75,10 +80,10 @@ public class UserService {
         try {
             validateUser(user);
             validatePasswordComplexity(user.getPassword());
-            if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            if (userRepository.findByUsername(user.getUsername()) != null) {
                 throw new UsernameExistsException("A user with this username already exists.");
             }
-            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            if (userRepository.findByEmail(user.getEmail()) != null) {
                 throw new EmailExistsException("A user with this email already exists.");
             }
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword())); // Encode the password before saving
@@ -109,22 +114,59 @@ public class UserService {
     }
 
     /**
-     * Authenticates the user with the provided login credentials.
+     * Authenticates a user based on the provided login credentials.
      *
-     * @param loginDTO The login data transfer object containing the user's login and password.
+     * @param loginDTO The login data transfer object containing the username or email and password.
      * @return The authenticated user.
-     * @throws UsernameNotFoundException If the email or username is invalid.
-     * @throws BadCredentialsException If the password is invalid.
+     * @throws UsernameNotFoundException If the provided email or username is invalid.
+     * @throws BadCredentialsException If the provided password is invalid.
      */
     public Authentication authenticate(LoginDTO loginDTO) {
-        try {
-            System.out.println(loginDTO.getUsernameOrEmail() + " "+loginDTO.getPassword() );
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        return authentication;
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Authentication failed: " + e.getMessage());
+        User user = userRepository.findByEmail(loginDTO.getUsernameOrEmail());
+        if (user == null) {
+            user = userRepository.findByUsername(loginDTO.getUsernameOrEmail());
         }
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid email or username");
+        }
+        try {
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return authentication;
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid password");
+        }
+    }
+
+    /**
+     * This class represents a Data Transfer Object (DTO) for the User entity.
+     * It is used to transfer user data between different layers of the application.
+     */
+    public UserDTO getCurrentUser(Authentication authentication) {
+        String emailOrUsername = authentication.getName();
+        User user = userRepository.findByEmail(emailOrUsername);
+        if (user == null) {
+            user = userRepository.findByUsername(emailOrUsername);
+        }
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return userMapper.toDTO(user);
+    }
+
+    /**
+     * This class represents a Data Transfer Object (DTO) for a user.
+     * It contains the user's username and email.
+     */
+    public UserDTO updateUser(UserDTO userDTO, Authentication authentication) {
+        UserDTO currentUserDTO = getCurrentUser(authentication);
+        User user = userRepository.findById(currentUserDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        User savedUser = userRepository.save(user);
+        return userMapper.toDTO(savedUser);
     }
 }
