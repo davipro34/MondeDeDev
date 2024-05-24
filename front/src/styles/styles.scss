@@ -1,18 +1,331 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Theming */
 
+@use '@angular/material' as mat;
+
+$my-primary-palette: (
+  50: #ece9f6,
+  100: #cfc8ea,
+  200: #b0a4dd,
+  300: #907fd0,
+  400: #7763c5, // Primary color
+  500: #5e49bb,
+  600: #5444b4,
+  700: #473cab,
+  800: #3a36a2,
+  900: #242b94,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$my-accent-palette: (
+  50: #ebe7f8,
+  100: #ccc5ed,
+  200: #ab9fe2,
+  300: #8879d8,
+  400: #6b5ccf, // Accent color
+  500: #4c41c6,
+  600: #413dc0,
+  700: #2f35b7,
+  800: #182faf,
+  900: #0024a1,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$my-warn-palette: (
+  50: #FDE9EC,
+  100: #F9C9CC,
+  200: #E59391,
+  300: #D76A67,
+  400: #DE4943,
+  500: #DF3827,
+  600: #D12E27,
+  700: #C02322,
+  800: #B31C1B,
+  900: #A40F0F, // Warn color
+  A100: #DF3827,
+  A200: #DF3827,
+  A400: #DF3827,
+  A700: #DF3827,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+// Define colors
+$my-primary: mat.define-palette($my-primary-palette, 400);
+//$my-accent: mat.define-palette($my-gray-palette);
+$my-accent: mat.define-palette($my-accent-palette, 400);
+$my-warn: mat.define-palette($my-warn-palette, 900);
+
+// Typography configuration
+$my-typography: mat.define-typography-config(
+  $font-family: 'Inter',
+  $headline-6: mat.define-typography-level(24px, 30px, 700), //h2
+  $subtitle-1: mat.define-typography-level(16px, 20px, 700), //h3
+);
+@include mat.typography-hierarchy($my-typography);
+
+// Define theme
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  ),
+  typography: $my-typography
+));
+
+$primary-color: mat.get-theme-color($my-theme, primary);
+$accent-color: mat.get-theme-color($my-theme, accent);
+$warn-color: mat.get-theme-color($my-theme, warn);
+
+// Apply the theme to all components
+@include mat.all-component-themes($my-theme);
+
+:root {
+  --primary-color: #{$primary-color};
+  --accent-color: #{$accent-color};
+  --warn-color: #{$warn-color};
+  --gray-50: #F5F5F5; // Background of theme and article cards
+  --gray-100: #EEEEEE; // Background of comment
+  --gray-200: #D9D9D9; // User avatar background
+  --gray-700: #939393; // Placeholder text
+  --mat-toolbar-standard-height: 94px;
+  --mat-toolbar-mobile-height: 62px;
+  --content-standard-height: calc(100vh - var(--mat-toolbar-standard-height));
+  --content-mobile-height: calc(100vh - var(--mat-toolbar-mobile-height));
+}
+
+::placeholder {
+  color: var(--gray-700);
+}
+
+/* Reset */
+
+*, :before, :after {
+  box-sizing: border-box;
+}
+
+html, body {
+  //noinspection CssOverwrittenProperties
+  height: 100vh;
+  //noinspection CssOverwrittenProperties
+  height: 100svh;
+  //noinspection CssOverwrittenProperties
+  height: 100dvh;
+  margin: 0;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+address {
+  font-style: normal;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Screen reader utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Position utilities */
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  position: sticky;
+}
+
+/** Padding utilities */
+.p-1 {
+  padding: 1rem;
+}
+
+/* Grid utilities */
+//Inspiration for auto-grid from Kevin Powell : https://youtu.be/p3_xN2Zp1TY?si=BTdcz5FLdSmwwzZg&t=163
+.auto-grid {
+  --min-column-size: 20rem;
+  --minmax-min: min(var(--min-column-size), 100%);
+  --minmax-max: 1fr;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--minmax-min), var(--minmax-max)));
+  gap: 1rem;
+}
+
+/** Flex utilities */
 .flex {
-    --direction: row;
-    --justify: normal;
-    --gap: 1rem;
-    display: flex;
-    gap: var(--gap);
-    flex-direction: var(--direction);
-    justify-content: var(--justify);
+  --direction: row;
+  --justify: normal;
+  --gap: 1rem;
+  display: flex;
+  gap: var(--gap);
+  flex-direction: var(--direction);
+  justify-content: var(--justify);
 }
-  
+
 .flex-col {
-    --direction: column;
+  --direction: column;
 }
+
+.justify-start {
+  --justify: space-between;
+}
+
+.justify-between {
+  --justify: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.grow {
+  --flex-grow: 1;
+  flex-grow: var(--flex-grow);
+}
+
+/** Text utilities */
+.line-clamp {
+  --lineclamp: 3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lineclamp);
+}
+
+.line-clamp-5 {
+  --lineclamp: 5;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+/* Customized Material UI */
+
+mat-card.card {
+  --flex-direction: column;
+  --justify-content: space-between;
+  background-color: var(--gray-50);
+  display: flex;
+  flex-direction: var(--flex-direction);
+  justify-content: var(--justify-content);
+}
+
+mat-card-subtitle, .subtitle{
+  color: black;
+  padding-bottom: 0.5rem;
+}
+
+mat-divider {
+  --mat-divider-color: black;
+}
+
+/* Layout */
+
+.mat-sidenav-content-wrapper > * {
+  & > main {
+    --padding-page: 1rem;
+    min-height: 100%;
+    padding: var(--padding-page);
+  }
+}
+
+  .return-link {
+    grid-area: back-button;
+    position: sticky;
+    display: grid;
+    place-content: center;
+    justify-content: center;
+    justify-self: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+  }
+
+  .return-link:hover {
+    color: var(--primary-color);
+  }
