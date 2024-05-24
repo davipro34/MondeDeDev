@@ -1,49 +1,71 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './features/auth/interceptors/auth.interceptor';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import localeFr from '@angular/common/locales/fr';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from "./app.component";
 import { HomeComponent } from './components/home/home.component';
+import { MatCardModule } from '@angular/material/card';
+import { NgOptimizedImage } from "@angular/common";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { MatIcon } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import {MatIcon} from "@angular/material/icon";
-import { RegisterComponent } from './features/auth/register/register.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from './features/auth/services/auth.service';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './features/auth/interceptors/auth.interceptor';
-import { LoginComponent } from './features/auth/login/login.component';
+import { MatInput } from "@angular/material/input";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatToolbar } from "@angular/material/toolbar";
+import { MatNavList } from "@angular/material/list";
+import { MatDivider } from "@angular/material/divider";
+import { LoginComponent } from "./features/auth/login/login.component";
+import { RegisterComponent } from "./features/auth/register/register.component";
+import { MeComponent } from "./features/me/components/me/me.component";
 import { HeaderComponent } from './components/header/header.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
+
+registerLocaleData(localeFr, 'fr');
 
 @NgModule({
   declarations: [
     AppComponent,
+    HeaderComponent,
     HomeComponent,
-    RegisterComponent,
+    NavbarComponent,
     LoginComponent,
-    HeaderComponent
+    RegisterComponent,
+    MeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatCardModule,
+    BrowserAnimationsModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
+    MatCardModule,
+    HttpClientModule,
+    NgOptimizedImage,
     MatIcon,
-    MatSidenavModule,
+    MatFormFieldModule,
+    MatInput,
+    MatProgressSpinner,
+    MatMenuModule,
+    MatSelect,
+    MatOption,
     FormsModule,
-    HttpClientModule
+    MatSidenavModule,
+    MatToolbar,
+    MatNavList,
+    MatDivider
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr'},
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    AuthService
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
 })

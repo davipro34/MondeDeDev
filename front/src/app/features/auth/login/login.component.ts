@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
          * Fonction appelée en cas de succès de la connexion.
          */
         next: () => {
-          this.router.navigate(['/']).then(
+          this.router.navigate(['/me']).then(
             () => {
             }
           );
