@@ -20,4 +20,12 @@ export class UserService {
   public updateUser(user: User): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}`, user);
   }
+
+  public subscribeToTheme(themeId: number): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/themes/${themeId}`, {});
+  }
+
+  public unsubscribeFromTheme(themeId: number): Observable<User> {
+    return this.http.delete<User>(`${this.apiUrl}/themes/${themeId}`);
+  }
 }

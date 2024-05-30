@@ -1,25 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
 import { User } from '../../me/interfaces/user';
-import { Observable } from 'rxjs/internal/Observable';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { ThemeService } from '../../themes/services/theme.service';
+import { Theme } from '../../themes/interfaces/theme';
 import { UserService } from '../../me/services/user.service';
-import { catchError, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-
   private _user: BehaviorSubject<User | null > = new BehaviorSubject<User | null>(null);
   public user$: Observable<User | null> = this._user.asObservable();
 
-  
+  private _subscribedThemes:BehaviorSubject<Theme[]> = new BehaviorSubject<Theme[]>([]);
+  public subscribedThemes$: Observable<Theme[]> = this._subscribedThemes.asObservable();
+
   private _isLoggedSubject$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isLoggedIn$: Observable<any> = this._isLoggedSubject$.asObservable();
 
   constructor(private authService: AuthService,
-              private userService: UserService) {
+              private userService: UserService,
+              private themeService: ThemeService) {
     this.initializeUser();
   }
 
@@ -33,10 +36,15 @@ export class SessionService {
     localStorage.removeItem('token');
     this._user.next(null);
     this._isLoggedSubject$.next(false);
+    this._subscribedThemes.next([]); // Clear subscribed themes
   }
 
   public updateUser(updatedUser: User): void {
     this._user.next(updatedUser);
+    this.themeService.getThemes().subscribe(themes => {
+      const subscribedThemes = themes.filter(theme => updatedUser.subscribedThemeIds.includes(theme.id));
+      this._subscribedThemes.next(subscribedThemes);
+    });
   }
 
   public async initializeUser(): Promise<void> {
@@ -52,9 +60,19 @@ export class SessionService {
             throw error;
           })
         ));
-        this._user.next(user);
+
+        if (user) {
+          this._user.next(user);
+          const themes: Theme[] = await firstValueFrom(this.themeService.getThemes());
+          if (themes) {
+            const subscribedThemes: Theme[] = themes.filter(theme => user.subscribedThemeIds.includes(theme.id));
+            console.log(subscribedThemes);
+            this._subscribedThemes.next(subscribedThemes);
+          }
+          this._isLoggedSubject$.next(true);
+        }
       } catch (error) {
-        console.error('Erreur lors de l\'initialisation de l\'utilisateur', error);
+        throw error;
       }
     }
   }

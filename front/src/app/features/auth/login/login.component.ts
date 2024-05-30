@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   login(): void {
     /**
      * Requête de connexion.
-     * @param usernameOrEmail - L'e-mail ou le nom d'utilisateur.
+     * @param usernameOrEmail - Le nom d'utilisateur ou l'e-mail.
      * @param password - Le mot de passe.
      */
     const loginRequest: Login = {
