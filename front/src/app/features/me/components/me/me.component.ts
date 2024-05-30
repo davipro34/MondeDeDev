@@ -5,22 +5,25 @@ import {Subscription} from "rxjs";
 import {UserService} from "../../services/user.service";
 import {User} from "../../interfaces/user";
 import {Router} from "@angular/router";
+import { Theme } from 'src/app/features/themes/interfaces/theme';
 
 @Component({
   selector: 'app-me',
+  standalone: false,
   templateUrl: './me.component.html',
   styleUrls: ['./me.component.scss']
 })
 export class MeComponent implements OnInit, OnDestroy {
-
+  subscribedThemes: Theme[] = [];
   user: User | null = null;
-
+  private themesSubscription: Subscription | null = null;
   private userSubscription: Subscription | null = null;
 
   formControls: { [key: string]: FormControl } = {
     username: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
   };
+
 
   labels: { [key: string]: string } = {
     username: 'Nom d’utilisateur',
@@ -40,7 +43,11 @@ export class MeComponent implements OnInit, OnDestroy {
   constructor(private sessionService: SessionService,
               private userService: UserService, private router: Router) {}
 
+
   ngOnInit(): void {
+    this.themesSubscription = this.sessionService.subscribedThemes$.subscribe(themes => {
+      this.subscribedThemes = themes;
+    });
 
     this.userSubscription = this.sessionService.user$.subscribe(user => {
       this.user = user;
@@ -62,6 +69,7 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+
     if (this.formControls["username"].valid && this.formControls['email'].valid) {
       if (this.user && this.user.id !== undefined && this.user.id !== null) {
         const updatedUser: User = {
@@ -69,6 +77,7 @@ export class MeComponent implements OnInit, OnDestroy {
           username: this.formControls['username'].value,
           email: this.formControls['email'].value,
           password: this.user.password,
+          subscribedThemeIds: this.user.subscribedThemeIds
         };
         this.userService.updateUser(updatedUser).subscribe((user) => {
           this.sessionService.updateUser(user);
@@ -87,9 +96,16 @@ export class MeComponent implements OnInit, OnDestroy {
     );
   }
 
+  onUnsubscribe(themeId : number){
+    this.userService.unsubscribeFromTheme(themeId).subscribe((updatedUser) => {
+      this.sessionService.updateUser(updatedUser);
+    });
+  }
 
   ngOnDestroy(): void {
-
+    if (this.themesSubscription) {
+      this.themesSubscription.unsubscribe();
+    }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }

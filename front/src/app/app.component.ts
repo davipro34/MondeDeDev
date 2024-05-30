@@ -2,9 +2,18 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  styles: [`
+    :host {
+      position: fixed;
+      inset: 0 0 0 0;
+      height: 100%;
+      width: 100%;
+    }
+  `],
 })
 export class AppComponent {
-  title = 'front';
+
 }

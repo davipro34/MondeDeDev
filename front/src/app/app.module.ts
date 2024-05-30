@@ -1,9 +1,8 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './features/auth/interceptors/auth.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import localeFr from '@angular/common/locales/fr';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,6 +27,9 @@ import { LoginComponent } from "./features/auth/login/login.component";
 import { RegisterComponent } from "./features/auth/register/register.component";
 import { MeComponent } from "./features/me/components/me/me.component";
 import { HeaderComponent } from './components/header/header.component';
+import {ListComponent as ThemeListComponent} from "./features/themes/components/list/list.component";
+import localeFr from '@angular/common/locales/fr';
+import { GlobalErrorHandler } from './services/globalerrorhandler.service';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -39,7 +41,8 @@ registerLocaleData(localeFr, 'fr');
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
-    MeComponent
+    MeComponent,
+    ThemeListComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,8 @@ registerLocaleData(localeFr, 'fr');
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr'},
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ],
   bootstrap: [AppComponent],
 })
