@@ -1,49 +1,55 @@
 package com.openclassrooms.mddapi.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.openclassrooms.mddapi.dtos.UserDTO;
 import com.openclassrooms.mddapi.dtos.UserRegistrationDTO;
 import com.openclassrooms.mddapi.dtos.UserResponseDTO;
 import com.openclassrooms.mddapi.models.User;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+@Component
+public class UserMapper {
 
+    public User userDtoToUser(UserRegistrationDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        return user;
+    }
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
+    public UserResponseDTO userToUserResponseDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        responseDTO.setUsername(user.getUsername());
+        responseDTO.setEmail(user.getEmail());
+        return responseDTO;
+    }
 
-    /**
-     * Converts a UserRegistrationDTO object to a User object.
-     *
-     * @param dto The UserRegistrationDTO object to be converted.
-     * @return The converted User object.
-     */
-    @Mapping(target = "id", ignore = true)
-    User userDtoToUser(UserRegistrationDTO dto);
+    public UserDTO toDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
+    }
 
-    /**
-     * Converts a User object to a UserResponseDTO object.
-     *
-     * @param user The User object to be converted.
-     * @return The converted UserResponseDTO object.
-     */
-    UserResponseDTO userToUserResponseDTO(User user);
-
-    /**
-     * Converts a User object to a UserDTO object.
-     *
-     * @param user The User object to be converted.
-     * @return The converted UserDTO object.
-     */
-    UserDTO toDTO(User user);
-
-    /**
-     * Converts a UserDTO object to a User object.
-     *
-     * @param dto The UserDTO object to be converted.
-     * @return The converted User object.
-     */
-    @Mapping(target = "password", ignore = true)
-    User toEntity(UserDTO userDTO);
-
+    public User toEntity(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        }
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        return user;
+    }
 }

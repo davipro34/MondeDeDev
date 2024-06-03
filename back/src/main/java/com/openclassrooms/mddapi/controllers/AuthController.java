@@ -1,6 +1,5 @@
 package com.openclassrooms.mddapi.controllers;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,12 +28,14 @@ public class AuthController {
 
     private final UserService userService;
     private final JWTService jwtService;
-    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-    private final TokenMapper tokenMapper = Mappers.getMapper(TokenMapper.class);
+    private final UserMapper userMapper;
+    private final TokenMapper tokenMapper;
 
-    public AuthController(UserService userService, JWTService jwtService) {
+    public AuthController(UserService userService, JWTService jwtService, UserMapper userMapper, TokenMapper tokenMapper) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.userMapper = userMapper;
+        this.tokenMapper = tokenMapper;
     }
 
     /**

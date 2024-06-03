@@ -1,29 +1,31 @@
 package com.openclassrooms.mddapi.mappers;
 
-import org.mapstruct.Mapper;
-
 import com.openclassrooms.mddapi.dtos.ThemeDTO;
 import com.openclassrooms.mddapi.models.Theme;
+import org.springframework.stereotype.Component;
 
-/**
- * The ThemeMapper interface is responsible for mapping Theme objects to ThemeDTO objects and vice versa.
- */
-@Mapper(componentModel = "spring")
-public interface ThemeMapper {
+@Component
+public class ThemeMapper {
 
-    /**
-     * Converts a Theme object to a ThemeDTO object.
-     *
-     * @param theme The Theme object to be converted.
-     * @return The corresponding ThemeDTO object.
-     */
-    ThemeDTO toDTO(Theme theme);
+    public ThemeDTO toDTO(Theme theme) {
+        if (theme == null) {
+            return null;
+        }
+        return ThemeDTO.builder()
+                .id(theme.getId())
+                .title(theme.getTitle())
+                .description(theme.getDescription())
+                .build();
+    }
 
-    /**
-     * Converts a ThemeDTO object to a Theme object.
-     *
-     * @param themeDTO The ThemeDTO object to be converted.
-     * @return The corresponding Theme object.
-     */
-    Theme toEntity(ThemeDTO themeDTO);
+    public Theme toEntity(ThemeDTO themeDTO) {
+        if (themeDTO == null) {
+            return null;
+        }
+        Theme theme = new Theme();
+        theme.setId(themeDTO.getId());
+        theme.setTitle(themeDTO.getTitle());
+        theme.setDescription(themeDTO.getDescription());
+        return theme;
+    }
 }
