@@ -141,8 +141,11 @@ public class UserService {
     }
 
     /**
-     * This class represents a Data Transfer Object (DTO) for the User entity.
-     * It is used to transfer user data between different layers of the application.
+     * Retrieves the current authenticated user and converts it to a UserDTO.
+     *
+     * @param authentication The authentication object containing the user's credentials.
+     * @return The UserDTO of the current authenticated user.
+     * @throws UsernameNotFoundException If the user is not found.
      */
     public UserDTO getCurrentUser(Authentication authentication) {
         String emailOrUsername = authentication.getName();
@@ -157,8 +160,12 @@ public class UserService {
     }
 
     /**
-     * This class represents a Data Transfer Object (DTO) for a user.
-     * It contains the user's username and email.
+     * Updates the current authenticated user's information.
+     *
+     * @param userDTO The UserDTO containing the updated user information.
+     * @param authentication The authentication object containing the user's credentials.
+     * @return The updated UserDTO.
+     * @throws EntityNotFoundException If the user is not found.
      */
     public UserDTO updateUser(UserDTO userDTO, Authentication authentication) {
         UserDTO currentUserDTO = getCurrentUser(authentication);

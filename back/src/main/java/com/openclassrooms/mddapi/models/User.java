@@ -57,10 +57,19 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "theme_id")
     )
+    /**
+     * The list of themes that the user is subscribed to.
+     */
     @Builder.Default
     private List<Theme> themes = new ArrayList<>();
 
+    /**
+     * Returns a list of theme IDs that the user is subscribed to.
+     *
+     * @return a list of theme IDs
+     */
     public List<Long> getThemeIds() {
-    return themes.stream().map(theme -> theme.getId()).collect(Collectors.toList());
+        return themes.stream().map(theme -> theme.getId()).collect(Collectors.toList());
+    }
 }
-}
+

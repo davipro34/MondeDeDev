@@ -10,6 +10,12 @@ import com.openclassrooms.mddapi.models.User;
 @Component
 public class UserMapper {
 
+    /**
+     * Converts a UserRegistrationDTO to a User entity.
+     *
+     * @param dto The UserRegistrationDTO to convert.
+     * @return The converted User entity, or null if the input dto is null.
+     */
     public User userDtoToUser(UserRegistrationDTO dto) {
         if (dto == null) {
             return null;
@@ -21,6 +27,12 @@ public class UserMapper {
         return user;
     }
 
+    /**
+     * Converts a User entity to a UserResponseDTO.
+     *
+     * @param user The User entity to convert.
+     * @return The converted UserResponseDTO, or null if the input user is null.
+     */
     public UserResponseDTO userToUserResponseDTO(User user) {
         if (user == null) {
             return null;
@@ -31,6 +43,12 @@ public class UserMapper {
         return responseDTO;
     }
 
+    /**
+     * Converts a User entity to a UserDTO.
+     *
+     * @param user The User entity to convert.
+     * @return The converted UserDTO, or null if the input user is null.
+     */
     public UserDTO toDTO(User user) {
         if (user == null) {
             return null;
@@ -43,6 +61,12 @@ public class UserMapper {
                 .build();
     }
 
+    /**
+     * Converts a UserDTO to a User entity.
+     *
+     * @param userDTO The UserDTO to convert.
+     * @return The converted User entity, or null if the input userDTO is null.
+     */
     public User toEntity(UserDTO userDTO) {
         if (userDTO == null) {
             return null;

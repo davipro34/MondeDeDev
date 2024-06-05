@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,8 +32,20 @@ public class Theme {
     @Column(nullable = false)
     private String description;
 
+    /**
+     * The list of users subscribed to this theme.
+     */
     @Builder.Default
     @ManyToMany(mappedBy = "themes")
     private List<User> users = new ArrayList<>();
 
+    /**
+     * Returns a list of user IDs that are subscribed to this theme.
+     *
+     * @return a list of user IDs
+     */
+    public List<Long> getUserds() {
+    return users.stream().map(user -> user.getId()).collect(Collectors.toList());
+    }
 }
+
