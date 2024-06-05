@@ -57,7 +57,7 @@ public class UserMapper {
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .themeIds(user.getThemeIds())
+                .subscribedThemeIds(user.getThemeIds())
                 .build();
     }
 
