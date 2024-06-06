@@ -1,6 +1,5 @@
 package com.openclassrooms.mddapi.controllers;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mddapi.dtos.LoginDTO;
 import com.openclassrooms.mddapi.dtos.TokenResponseDTO;
 import com.openclassrooms.mddapi.dtos.UserRegistrationDTO;
-import com.openclassrooms.mddapi.dtos.UserResponseDTO;
+import com.openclassrooms.mddapi.dtos.UserRegistrationResponseDTO;
 import com.openclassrooms.mddapi.mappers.TokenMapper;
 import com.openclassrooms.mddapi.mappers.UserMapper;
 import com.openclassrooms.mddapi.models.User;
@@ -29,12 +28,14 @@ public class AuthController {
 
     private final UserService userService;
     private final JWTService jwtService;
-    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-    private final TokenMapper tokenMapper = Mappers.getMapper(TokenMapper.class);
+    private final UserMapper userMapper;
+    private final TokenMapper tokenMapper;
 
-    public AuthController(UserService userService, JWTService jwtService) {
+    public AuthController(UserService userService, JWTService jwtService, UserMapper userMapper, TokenMapper tokenMapper) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.userMapper = userMapper;
+        this.tokenMapper = tokenMapper;
     }
 
     /**
@@ -46,10 +47,10 @@ public class AuthController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/auth/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {        
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {        
         User user = userMapper.userDtoToUser(userRegistrationDTO); 
         User savedUser = userService.saveUser(user);
-        UserResponseDTO responseDTO = userMapper.userToUserResponseDTO(savedUser);
+        UserRegistrationResponseDTO responseDTO = userMapper.userToUserRegistrationResponseDTO(savedUser);
         return ResponseEntity.ok(responseDTO);
     }
 

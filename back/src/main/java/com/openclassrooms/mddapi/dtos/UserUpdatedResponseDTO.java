@@ -1,17 +1,13 @@
 package com.openclassrooms.mddapi.dtos;
 
 import java.util.List;
-
-import lombok.Builder;
 import lombok.Data;
 
 /**
- * Data Transfer Object for user information.
- * This class is used to transfer user data between different layers of the application.
+ * Represents a user updated response data transfer object.
  */
 @Data
-@Builder(toBuilder = true)
-public class UserDTO {
+public class UserUpdatedResponseDTO {
     private Long id;
     private String username;
     private String email;

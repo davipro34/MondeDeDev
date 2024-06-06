@@ -96,15 +96,6 @@ buildNumber.properties
 **/.history/*
 *.code-workspace
 
-### Miscellaneous ###
-**/.angular/cache
-**/.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
 ### System files ###
 .DS_Store
 Thumbs.db
@@ -156,5 +147,15 @@ Desktop.ini
 
 # Dependency directories (general)
 **/bower_components/
+
+### Miscellaneous ###
+**/.angular/cache
+**/.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+.cursorrules
 
 # End

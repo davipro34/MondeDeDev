@@ -18,10 +18,13 @@ import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.dtos.LoginDTO;
 import com.openclassrooms.mddapi.dtos.UserDTO;
+import com.openclassrooms.mddapi.dtos.UserUpdatedResponseDTO;
 import com.openclassrooms.mddapi.exceptions.EmailExistsException;
 import com.openclassrooms.mddapi.exceptions.UsernameExistsException;
 import com.openclassrooms.mddapi.mappers.UserMapper;
+import com.openclassrooms.mddapi.models.Theme;
 import com.openclassrooms.mddapi.models.User;
+import com.openclassrooms.mddapi.repository.ThemeRepository;
 import com.openclassrooms.mddapi.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -42,12 +45,14 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
+    private final ThemeRepository themeRepository;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager, UserMapper userMapper, ThemeRepository themeRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationManager = authenticationManager;
         this.userMapper = userMapper;
+        this.themeRepository = themeRepository;
     }
 
     /**
@@ -141,8 +146,11 @@ public class UserService {
     }
 
     /**
-     * This class represents a Data Transfer Object (DTO) for the User entity.
-     * It is used to transfer user data between different layers of the application.
+     * Retrieves the current authenticated user and converts it to a UserDTO.
+     *
+     * @param authentication The authentication object containing the user's credentials.
+     * @return The UserDTO of the current authenticated user.
+     * @throws UsernameNotFoundException If the user is not found.
      */
     public UserDTO getCurrentUser(Authentication authentication) {
         String emailOrUsername = authentication.getName();
@@ -157,15 +165,56 @@ public class UserService {
     }
 
     /**
-     * This class represents a Data Transfer Object (DTO) for a user.
-     * It contains the user's username and email.
+     * Updates the current authenticated user's information.
+     *
+     * @param userDTO The UserDTO containing the updated user information.
+     * @param authentication The authentication object containing the user's credentials.
+     * @return The updated UserDTO.
+     * @throws EntityNotFoundException If the user is not found.
      */
-    public UserDTO updateUser(UserDTO userDTO, Authentication authentication) {
+    public UserUpdatedResponseDTO updateUser(UserDTO userDTO, Authentication authentication) {
         UserDTO currentUserDTO = getCurrentUser(authentication);
         User user = userRepository.findById(currentUserDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
+        User savedUser = userRepository.save(user);
+        return userMapper.userToUserUpdatedResponseDTO(userMapper.toDTO(savedUser));
+    }
+
+    /**
+     * Subscribes the current user to a theme.
+     *
+     * @param themeId the ID of the theme to subscribe to
+     * @param authentication the authentication object representing the current user
+     * @return the updated UserDTO
+     * @throws EntityNotFoundException if the user or theme is not found
+     */
+    public UserDTO subscribeToTheme(Long themeId, Authentication authentication) {
+        UserDTO currentUserDTO = getCurrentUser(authentication);
+        User user = userRepository.findById(currentUserDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Theme theme = themeRepository.findById(themeId)
+                .orElseThrow(() -> new EntityNotFoundException("Theme not found"));
+        user.getThemes().add(theme);
+        User savedUser = userRepository.save(user);
+        return userMapper.toDTO(savedUser);
+    }
+
+    /**
+     * Unsubscribes the current user from a theme.
+     *
+     * @param themeId the ID of the theme to unsubscribe from
+     * @param authentication the authentication object representing the current user
+     * @return the updated UserDTO
+     * @throws EntityNotFoundException if the user or theme is not found
+     */
+    public UserDTO unsubscribeFromTheme(Long themeId, Authentication authentication) {
+        UserDTO currentUserDTO = getCurrentUser(authentication);
+        User user = userRepository.findById(currentUserDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Theme theme = themeRepository.findById(themeId)
+                .orElseThrow(() -> new EntityNotFoundException("Theme not found"));
+        user.getThemes().remove(theme);
         User savedUser = userRepository.save(user);
         return userMapper.toDTO(savedUser);
     }
