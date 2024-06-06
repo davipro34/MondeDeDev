@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mddapi.dtos.LoginDTO;
 import com.openclassrooms.mddapi.dtos.TokenResponseDTO;
 import com.openclassrooms.mddapi.dtos.UserRegistrationDTO;
-import com.openclassrooms.mddapi.dtos.UserResponseDTO;
+import com.openclassrooms.mddapi.dtos.UserRegistrationResponseDTO;
 import com.openclassrooms.mddapi.mappers.TokenMapper;
 import com.openclassrooms.mddapi.mappers.UserMapper;
 import com.openclassrooms.mddapi.models.User;
@@ -47,10 +47,10 @@ public class AuthController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/auth/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {        
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {        
         User user = userMapper.userDtoToUser(userRegistrationDTO); 
         User savedUser = userService.saveUser(user);
-        UserResponseDTO responseDTO = userMapper.userToUserResponseDTO(savedUser);
+        UserRegistrationResponseDTO responseDTO = userMapper.userToUserRegistrationResponseDTO(savedUser);
         return ResponseEntity.ok(responseDTO);
     }
 
