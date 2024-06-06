@@ -1,4 +1,4 @@
-.grid-layout {
+.grid-template-layout {
     display: grid;
     grid-template-columns: 3rem 1fr 3rem;
     grid-template-rows: 1fr;
@@ -10,10 +10,27 @@
 }
   
 @media (width < 599px) {
-    .grid-layout {
+    .grid-template-layout {
         grid-template-columns: 1rem 1fr 1rem;
         padding-inline: 0.5rem;
     }
+}
+
+.return-link {
+    grid-area: back-button;
+    position: sticky;
+    display: grid;
+    place-content: center;
+    justify-content: center;
+    justify-self: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+}
+
+.return-link:hover {
+    color: var(--primary-color);
 }
 
 h2 {
@@ -37,4 +54,3 @@ form {
     place-self: stretch;
     gap: 1.5rem;
 }
-

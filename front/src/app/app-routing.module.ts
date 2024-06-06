@@ -8,16 +8,15 @@ import { MeComponent } from './features/me/components/me/me.component';
 import { ListComponent as ThemeListComponent } from "./features/themes/components/list/list.component";
 
 const routes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
-  { path: 'me', component: MeComponent },
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: '',
     component: HeaderComponent,
     children: [
       { path: 'me', component: MeComponent },
-      { path: 'themes', component: ThemeListComponent }
+      { path: 'themes', component: ThemeListComponent },
     ]
   }
 ];

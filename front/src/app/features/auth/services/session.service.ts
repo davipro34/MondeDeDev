@@ -66,7 +66,6 @@ export class SessionService {
           const themes: Theme[] = await firstValueFrom(this.themeService.getThemes());
           if (themes) {
             const subscribedThemes: Theme[] = themes.filter(theme => user.subscribedThemeIds.includes(theme.id));
-            console.log(subscribedThemes);
             this._subscribedThemes.next(subscribedThemes);
           }
           this._isLoggedSubject$.next(true);

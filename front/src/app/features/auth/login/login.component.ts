@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Login } from '../interfaces/login';
+import { LoginSuccess } from '../interfaces/login-success';
+import { SessionService } from '../services/session.service';
 
 /**
  * Composant de connexion.
@@ -27,16 +29,16 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Libellés des champs du formulaire.
    */
   labels: { [key: string]: string } = {
-    usernameOrEmail: 'E-mail ou nom d’utilisateur',
-    password: 'Mot de passe',
+    usernameOrEmail: "E-mail ou nom d'utilisateur",
+    password: "Mot de passe",
   };
 
   /**
    * Noms des contrôles du formulaire.
    */
   controlNames: { [key: string]: string } = {
-    usernameOrEmail: 'votre e-mail ou nom d’utilisateur',
-    password: 'votre mot de passe',
+    usernameOrEmail: "votre e-mail ou nom d'utilisateur",
+    password: "votre mot de passe",
   };
 
   /**
@@ -52,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   loginSubscription!: Subscription;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private sessionService: SessionService) {}
 
   /**
    * Méthode appelée lors de l'initialisation du composant.
@@ -78,11 +80,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         /**
          * Fonction appelée en cas de succès de la connexion.
          */
-        next: () => {
-          this.router.navigate(['/me']).then(
-            () => {
-            }
-          );
+        next: (response: LoginSuccess) => {
+          this.sessionService.logIn(response.token);
+          this.router.navigate(['/me']).then(() => {});
         },
         /**
          * Fonction appelée en cas d'erreur lors de la connexion.
