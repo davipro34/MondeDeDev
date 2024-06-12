@@ -2,6 +2,7 @@ package com.openclassrooms.mddapi.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "articles")
 @Data
+@Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor

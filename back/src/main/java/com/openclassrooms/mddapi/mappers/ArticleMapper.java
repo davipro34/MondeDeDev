@@ -58,25 +58,25 @@ public class ArticleMapper {
         if (articleDTO == null) {
             return null;
         }
-        Article article = new Article();
-        article.setId(articleDTO.getId());
-        article.setTitle(articleDTO.getTitle());
-        article.setContent(articleDTO.getContent());
-        article.setCreated_at(articleDTO.getCreated_at());
-
+    
         User user = userRepository.findById(articleDTO.getUserId())
             .orElseThrow(() -> new RuntimeException("User not found with id " + articleDTO.getUserId()));
-        article.setUser(user);
-
+    
         Theme theme = themeRepository.findById(articleDTO.getThemeId())
-                                        .orElseThrow(() -> new RuntimeException("Theme not found with id " + articleDTO.getThemeId()));
-        article.setTheme(theme);
-
+            .orElseThrow(() -> new RuntimeException("Theme not found with id " + articleDTO.getThemeId()));
+    
         List<Comment> comments = articleDTO.getCommentIds().stream()
             .map(id -> commentRepository.findById(id).orElseThrow(() -> new RuntimeException("Comment not found with id " + id)))
             .collect(Collectors.toList());
-        article.setComments(comments);
-
-        return article;
+    
+        return Article.builder()
+            .id(articleDTO.getId())
+            .title(articleDTO.getTitle())
+            .content(articleDTO.getContent())
+            .created_at(articleDTO.getCreated_at())
+            .user(user)
+            .theme(theme)
+            .comments(comments)
+            .build();
     }
 }
