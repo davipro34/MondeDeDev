@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,4 +23,11 @@ public class ArticleDTO {
     private Long themeId;
     private List<Long> commentIds;
     private LocalDateTime created_at;
+
+    public List<Long> getCommentIds() {
+        if (commentIds == null) {
+            commentIds = new ArrayList<>();
+        }
+        return commentIds;
+    }
 }
