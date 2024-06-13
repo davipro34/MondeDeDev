@@ -3,23 +3,20 @@ import { Injectable } from "@angular/core";
 import { throwError } from "rxjs";
 
 @Injectable()
+/**
+ * Interceptor for adding authentication token to outgoing HTTP requests.
+ */
 export class AuthInterceptor implements HttpInterceptor {
   constructor() {}
 
   /**
-   * Intercepte les requêtes HTTP sortantes et ajoute l'en-tête d'autorisation si un jeton est disponible.
+   * Intercepts the outgoing HTTP requests and adds the authentication token if available.
+   * @param request - The outgoing HTTP request.
+   * @param next - The next interceptor in the chain.
+   * @returns An Observable of the HTTP response.
    */
   public intercept(request: HttpRequest<any>, next: HttpHandler) {
-    /**
-     * Si l'URL de la requête contient '/login', la requête est renvoyée sans modification.
-     * Si l'URL de la requête contient '/register', la requête est renvoyée sans modification.
-     * Si un jeton est disponible dans le stockage local, l'en-tête d'autorisation est ajouté à la requête.
-     * Sinon, une erreur HTTP avec le statut 401 est renvoyée.
-     * @param request - La requête HTTP sortante.
-     * @param next - Le gestionnaire HTTP pour passer la requête au prochain intercepteur ou au backend.
-     * @returns Un observable de la réponse HTTP.
-     * @throws Une erreur HTTP avec le statut 401 si aucun jeton n'est disponible.
-     */
+
     if (request.url.includes('/login')) {
       return next.handle(request);
     }

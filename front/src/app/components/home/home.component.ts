@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * Represents the HomeComponent of the application.
+ */
 @Component({
   selector: 'app-home',
   standalone: false,
@@ -7,4 +10,10 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  /**
+   * Initializes a new instance of the HomeComponent class.
+   */
+  constructor() {
+    // constructor logic goes here
+  }
 }

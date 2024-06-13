@@ -30,6 +30,9 @@ import { HeaderComponent } from './components/header/header.component';
 import {ListComponent as ThemeListComponent} from "./features/themes/components/list/list.component";
 import localeFr from '@angular/common/locales/fr';
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
+import {ListComponent as ArticleListComponent} from "./features/articles/components/list/list.component";
+import {DetailComponent as ArticleDetailComponent } from "./features/articles/components/detail/detail.component";
+import {FormComponent as ArticleFormComponent} from "./features/articles/components/form/form.component";
 
 registerLocaleData(localeFr, 'fr');
 
@@ -42,7 +45,10 @@ registerLocaleData(localeFr, 'fr');
     LoginComponent,
     RegisterComponent,
     MeComponent,
-    ThemeListComponent
+    ThemeListComponent,
+    ArticleDetailComponent,
+    ArticleListComponent,
+    ArticleFormComponent
   ],
   imports: [
     BrowserModule,
