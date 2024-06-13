@@ -1,3 +1,7 @@
+/**
+ * Represents the ListComponent class.
+ * This component is responsible for displaying a list of themes and handling theme subscriptions.
+ */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Theme } from '../../interfaces/theme';
 import { Subscription } from 'rxjs';
@@ -21,6 +25,10 @@ export class ListComponent implements OnInit, OnDestroy {
               private sessionService: SessionService,
               private userService: UserService) {}
 
+  /**
+   * Initializes the component.
+   * Subscribes to the themeService to get all themes and the sessionService to get subscribed themes.
+   */
   ngOnInit(): void {
     this.themesSubscription = this.themeService.getThemes().subscribe(allThemes => {
       this.themes = allThemes;
@@ -31,16 +39,28 @@ export class ListComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Checks if a theme is subscribed.
+   * @param themeId - The ID of the theme to check.
+   * @returns True if the theme is subscribed, false otherwise.
+   */
   public isSubscribed(themeId: number): boolean {
     return this.subscribedThemeIds.includes(themeId);
   }
 
+  /**
+   * Subscribes to a theme.
+   * @param themeId - The ID of the theme to subscribe to.
+   */
   public onSubscribe(themeId: number): void {
     this.userServiceSubscription = this.userService.subscribeToTheme(themeId).subscribe((updatedUser) => {
       this.sessionService.updateUser(updatedUser);
     });
   }
 
+  /**
+   * Cleans up subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     if (this.themesSubscription) {
       this.themesSubscription.unsubscribe();

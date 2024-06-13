@@ -1,3 +1,7 @@
+/**
+ * Represents the LoginComponent class.
+ * This component is responsible for handling the login functionality.
+ */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -7,9 +11,6 @@ import { Login } from '../interfaces/login';
 import { LoginSuccess } from '../interfaces/login-success';
 import { SessionService } from '../services/session.service';
 
-/**
- * Composant de connexion.
- */
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -17,59 +18,39 @@ import { SessionService } from '../services/session.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  /**
-   * Contrôles du formulaire.
-   */
   formControls: { [key: string]: FormControl } = {
     usernameOrEmail: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   };
 
-  /**
-   * Libellés des champs du formulaire.
-   */
   labels: { [key: string]: string } = {
     usernameOrEmail: "E-mail ou nom d'utilisateur",
     password: "Mot de passe",
   };
 
-  /**
-   * Noms des contrôles du formulaire.
-   */
   controlNames: { [key: string]: string } = {
     usernameOrEmail: "votre e-mail ou nom d'utilisateur",
     password: "votre mot de passe",
   };
 
-  /**
-   * Messages d'erreur des champs du formulaire.
-   */
   errorMessages: { [key: string]: string } = {
     usernameOrEmail: '',
     password: '',
   };
 
-  /**
-   * Abonnement à la connexion.
-   */
   loginSubscription!: Subscription;
 
   constructor(private authService: AuthService, private router: Router, private sessionService: SessionService) {}
 
   /**
-   * Méthode appelée lors de l'initialisation du composant.
+   * Initializes the component.
    */
   ngOnInit(): void {}
 
   /**
-   * Méthode de connexion.
+   * Performs the login operation.
    */
   login(): void {
-    /**
-     * Requête de connexion.
-     * @param usernameOrEmail - Le nom d'utilisateur ou l'e-mail.
-     * @param password - Le mot de passe.
-     */
     const loginRequest: Login = {
       usernameOrEmail: this.formControls['usernameOrEmail'].value,
       password: this.formControls['password'].value,
@@ -77,18 +58,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.loginSubscription = this.authService.login(loginRequest)
       .subscribe({
-        /**
-         * Fonction appelée en cas de succès de la connexion.
-         */
         next: (response: LoginSuccess) => {
           this.sessionService.logIn(response.token);
-          this.router.navigate(['/me']).then(() => {});
+          this.router.navigate(['/articles']).then(() => {});
         },
-        /**
-         * Fonction appelée en cas d'erreur lors de la connexion.
-         * @param error - L'erreur survenue.
-         * @throws L'erreur survenue.
-         */
         error: error => {
           throw error;
         }
@@ -96,8 +69,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Méthode appelée lorsqu'un champ perd le focus.
-   * @param controlName - Le nom du champ.
+   * Handles the blur event of the input control.
+   * @param controlName - The name of the control.
    */
   onBlur(controlName: string): void {
     const control = this.formControls[controlName];
@@ -106,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Méthode appelée lors de la soumission du formulaire.
+   * Handles the form submission.
    */
   onSubmit(): void {
     if (this.formControls['usernameOrEmail'].valid && this.formControls['password'].valid) {
@@ -115,7 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Méthode appelée lors de la destruction du composant.
+   * Cleans up resources before the component is destroyed.
    */
   ngOnDestroy(): void {
     if(this.loginSubscription){

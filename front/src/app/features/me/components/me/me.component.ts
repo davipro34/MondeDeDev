@@ -1,3 +1,7 @@
+/**
+ * Represents the MeComponent class.
+ * This component is responsible for displaying and managing the user profile information.
+ */
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
 import {SessionService} from "../../../auth/services/session.service";
@@ -24,7 +28,6 @@ export class MeComponent implements OnInit, OnDestroy {
     email: new FormControl('', [Validators.email, Validators.required]),
   };
 
-
   labels: { [key: string]: string } = {
     username: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
@@ -43,7 +46,11 @@ export class MeComponent implements OnInit, OnDestroy {
   constructor(private sessionService: SessionService,
               private userService: UserService, private router: Router) {}
 
-
+  /**
+   * Initializes the component.
+   * Subscribes to the sessionService's subscribedThemes$ and user$ observables.
+   * Sets the initial values for the form controls based on the user's information.
+   */
   ngOnInit(): void {
     this.themesSubscription = this.sessionService.subscribedThemes$.subscribe(themes => {
       this.subscribedThemes = themes;
@@ -62,14 +69,23 @@ export class MeComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Handles the onBlur event for the form controls.
+   * Marks the control as touched and sets the error message if the control is required and empty.
+   * @param controlName - The name of the form control.
+   */
   onBlur(controlName: string) {
     const control = this.formControls[controlName];
     control.markAsTouched();
     this.errorMessages[controlName] = control.hasError('required') ? `Veuillez saisir ${this.controlNames[controlName]}` : '';
   }
 
+  /**
+   * Handles the onSubmit event for the form.
+   * Updates the user's information if the form controls are valid.
+   * Logs out the user if the user is not logged in.
+   */
   onSubmit() {
-
     if (this.formControls["username"].valid && this.formControls['email'].valid) {
       if (this.user && this.user.id !== undefined && this.user.id !== null) {
         const updatedUser: User = {
@@ -84,10 +100,14 @@ export class MeComponent implements OnInit, OnDestroy {
         });
       } else {
          this.sessionService.logOut();
+      }
     }
   }
-  }
 
+  /**
+   * Handles the onLogout event.
+   * Logs out the user and navigates to the login page.
+   */
   onLogout(){
     this.sessionService.logOut();
     this.router.navigate(['/login']).then(
@@ -96,12 +116,21 @@ export class MeComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Handles the onUnsubscribe event for a theme.
+   * Unsubscribes the user from the specified theme.
+   * @param themeId - The ID of the theme to unsubscribe from.
+   */
   onUnsubscribe(themeId : number){
     this.userService.unsubscribeFromTheme(themeId).subscribe((updatedUser) => {
       this.sessionService.updateUser(updatedUser);
     });
   }
 
+  /**
+   * Cleans up the component.
+   * Unsubscribes from the themesSubscription and userSubscription observables.
+   */
   ngOnDestroy(): void {
     if (this.themesSubscription) {
       this.themesSubscription.unsubscribe();

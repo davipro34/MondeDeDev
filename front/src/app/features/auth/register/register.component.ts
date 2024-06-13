@@ -10,13 +10,14 @@ import {Router} from "@angular/router";
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
+/**
+ * Represents the RegisterComponent class.
+ * This component is responsible for handling user registration.
+ */
 export class RegisterComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription | undefined;
 
-  /**
-   * Contrôles de formulaire avec les validateurs correspondants.
-   */
   formControls: { [key: string]: FormControl } = {
     username: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
@@ -27,27 +28,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
     ]),
   };
 
-  /**
-   * Libellés des champs de formulaire.
-   */
   labels: { [key: string]: string } = {
     username: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
     password: 'Mot de passe',
   };
 
-  /**
-   * Messages d'erreur pour chaque champ de formulaire.
-   */
   errorMessages: { [key: string]: string } = {
     username: '',
     email: '',
     password: '',
   };
 
-  /**
-   * Noms des contrôles de formulaire avec leurs descriptions.
-   */
   controlNames: { [key: string]: string } = {
     username: 'un nom d’utilisateur avec au moins 4 caractères',
     email: 'une adresse e-mail valide',
@@ -56,11 +48,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  /**
+   * Lifecycle hook that is called after the component has been initialized.
+   */
   ngOnInit(): void {}
 
   /**
-   * Gère l'événement de perte de focus d'un champ de formulaire.
-   * @param controlName - Le nom du champ de formulaire.
+   * Event handler for the onBlur event of the form controls.
+   * Updates the error message based on the validation result.
+   * @param controlName - The name of the form control.
    */
   onBlur(controlName: string): void {
     const control = this.formControls[controlName];
@@ -75,8 +71,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Soumet le formulaire d'inscription.
-   * @throws - Lève une exception en cas d'erreur lors de l'inscription.
+   * Event handler for the onSubmit event of the form.
+   * Submits the registration request if the form is valid.
    */
   onSubmit(): void {
     if (this.formControls["username"].valid && this.formControls['email'].valid && this.formControls['password'].valid) {
@@ -98,9 +94,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Lifecycle hook that is called when the component is about to be destroyed.
+   * Unsubscribes from the subscription if it exists.
+   */
   ngOnDestroy(): void {
     if (this.subscription) {
-    this.subscription.unsubscribe();
+      this.subscription.unsubscribe();
     }
   }
 }

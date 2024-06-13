@@ -5,6 +5,10 @@ import { ArticleService } from '../../services/article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from 'src/app/features/auth/services/session.service';
 
+/**
+ * Represents the ListComponent class.
+ * This component is responsible for displaying a list of articles and handling sorting functionality.
+ */
 @Component({
   selector: 'app-list',
   standalone: false,
@@ -29,6 +33,11 @@ export class ListComponent implements OnInit, OnDestroy {
     private sessionService: SessionService
   ) { }
 
+  /**
+   * Initializes the component.
+   * Subscribes to route query parameters to get the sorting options.
+   * Subscribes to the articleService to get the articles for the subscribed themes.
+   */
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.sortBy = params['sort'];
@@ -46,6 +55,13 @@ export class ListComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Changes the sort order of the articles.
+   * Navigates to the current route with updated query parameters for sorting.
+   * Calls the articleService to sort the articles.
+   * @param sortBy - The field to sort by.
+   * @param direction - The sort direction.
+   */
   changeSortOrder(sortBy: string, direction: string): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -56,12 +72,22 @@ export class ListComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Handles the click event on the sort button.
+   * Updates the sort direction and changes the sort order.
+   * @param sortBy - The field to sort by.
+   * @param direction - The current sort direction.
+   */
   onSortClick(sortBy: string, direction: string): void {
     this.sortDirection = direction;
     this.sortDirections[sortBy] = direction === 'asc' ? 'desc' : 'asc';
     this.changeSortOrder(sortBy, this.sortDirection);
   }
 
+  /**
+   * Cleans up the component.
+   * Unsubscribes from the articleSubscription if it exists.
+   */
   ngOnDestroy(): void {
     if (this.articleSubscription) {
       this.articleSubscription.unsubscribe();

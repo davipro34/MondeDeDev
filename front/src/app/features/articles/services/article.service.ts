@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, mergeMap, Observable, of, take} from 'rxjs';
+import { BehaviorSubject, mergeMap, Observable, of, take } from 'rxjs';
 import { Article } from "../interfaces/article";
 import { Comment } from "../interfaces/comment";
-import {tap, switchMap} from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { SessionService } from '../../auth/services/session.service';
 
+/**
+ * Service for managing articles and comments.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +28,11 @@ export class ArticleService {
     ).subscribe();
   }
 
+  /**
+   * Retrieves articles for the specified theme IDs.
+   * @param themeIds - An array of theme IDs.
+   * @returns An observable that emits the articles.
+   */
   getArticlesForThemes(themeIds: number[]): Observable<Article[]> {
     return this.http.get<Article[]>(this.apiUrl).pipe(
       tap(articles => {
@@ -34,6 +42,11 @@ export class ArticleService {
     );
   }
 
+  /**
+   * Sorts the articles based on the specified criteria.
+   * @param sortBy - The criteria to sort by (e.g., 'date', 'title').
+   * @param direction - The sort direction ('asc' or 'desc').
+   */
   sortArticles(sortBy: string, direction: string = 'desc'): void {
     if (this._articles.value) {
       switch (sortBy) {
@@ -51,6 +64,11 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Retrieves the article with the specified ID.
+   * @param id - The ID of the article.
+   * @returns An observable that emits the article.
+   */
   getArticle(id: number): Observable<Article> {
     const article = this._articles.value.find(article => article.id === id);
     if (article) {
@@ -64,6 +82,11 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Creates a new article.
+   * @param article - The article data.
+   * @returns An observable that emits the created article.
+   */
   createArticle(article: Pick<Article, 'title' | 'content' | 'themeId'>): Observable<Article> {
     return this.sessionService.user$.pipe(
       take(1),
@@ -87,10 +110,20 @@ export class ArticleService {
     );
   }
 
+  /**
+   * Retrieves the comments for the specified article.
+   * @param articleId - The ID of the article.
+   * @returns An observable that emits the comments.
+   */
   getComments(articleId: number): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${this.apiUrl}/${articleId}/comments`);
   }
 
+  /**
+   * Creates a new comment for the specified article.
+   * @param comment - The comment data.
+   * @returns An observable that emits the created comment.
+   */
   createComment(comment: Pick<Comment, 'articleId' | 'content'>): Observable<Comment> {
     return this.sessionService.user$.pipe(
       take(1),

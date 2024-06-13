@@ -12,6 +12,9 @@ import { ArticleService } from '../../services/article.service';
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
+/**
+ * Represents the detail component for displaying an article and its comments.
+ */
 export class DetailComponent implements OnInit, OnDestroy {
   article: Article | undefined;
   comments: Comment[] = [];
@@ -40,6 +43,9 @@ export class DetailComponent implements OnInit, OnDestroy {
     private articleService: ArticleService,
   ) {}
 
+  /**
+   * Initializes the component by subscribing to route parameters and fetching the article and its comments.
+   */
   ngOnInit(): void {
     this.routeSubscription = this.route.params.subscribe(params => {
       const id = +params['id'];
@@ -52,12 +58,19 @@ export class DetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Handles the blur event of a form control.
+   * @param controlName - The name of the form control.
+   */
   onBlur(controlName: string): void {
     const control = this.formControls[controlName];
     control.markAsTouched();
     this.errorMessages[controlName] = control.hasError('required') ? `Veuillez saisir ${this.controlNames[controlName]}` : '';
   }
 
+  /**
+   * Handles the submission of a comment form.
+   */
   onSubmitComment(): void {
     if (this.formControls['content'].valid && this.article?.id) {
       const newComment: Pick<Comment, 'articleId' | 'content'> = {
@@ -78,6 +91,9 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Cleans up subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe();

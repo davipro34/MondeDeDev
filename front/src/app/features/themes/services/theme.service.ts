@@ -4,6 +4,9 @@ import { Theme } from '../interfaces/theme';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 
+/**
+ * Service for managing themes.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +17,12 @@ export class ThemeService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Retrieves the list of themes.
+   * If the themes have already been fetched, it returns them from the cache.
+   * Otherwise, it makes an HTTP GET request to fetch the themes from the server.
+   * @returns An observable that emits the list of themes.
+   */
   getThemes(): Observable<Theme[]> {
     if (this.themes) {
       return of(this.themes);
