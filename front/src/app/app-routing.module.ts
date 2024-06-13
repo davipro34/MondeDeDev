@@ -6,6 +6,9 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MeComponent } from './features/me/components/me/me.component';
 import { ListComponent as ThemeListComponent } from "./features/themes/components/list/list.component";
+import { ListComponent as ArticleListComponent } from "./features/articles/components/list/list.component";
+import {FormComponent as ArticleFormComponent} from "./features/articles/components/form/form.component";
+import {DetailComponent as ArticleDetailComponent} from "./features/articles/components/detail/detail.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,6 +20,9 @@ const routes: Routes = [
     children: [
       { path: 'me', component: MeComponent },
       { path: 'themes', component: ThemeListComponent },
+      { path: 'articles', component: ArticleListComponent },
+      { path: 'articles/new', component: ArticleFormComponent },
+      { path: 'articles/:id', component: ArticleDetailComponent },
     ]
   }
 ];
