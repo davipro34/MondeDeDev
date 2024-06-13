@@ -4,38 +4,38 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "themes")
+@Table(name = "comments")
 @Data
 @Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Theme {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String content;
 
-    @Column(nullable = false)
-    private String description;
+    @Getter
+    @Setter
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "themes", cascade = CascadeType.DETACH)
-    private List<User> users = new ArrayList<>();
+    @Getter
+    @Setter
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "article_id", nullable = false)
+    private Article article;
 
-    @OneToMany(mappedBy = "theme", cascade = CascadeType.DETACH)
-    private List<Article> articles;
 }
-

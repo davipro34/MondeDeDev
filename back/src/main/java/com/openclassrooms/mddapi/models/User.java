@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -51,6 +53,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
+    private List<Article> articles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
+    private List<Comment> comments;
+
     @ManyToMany
     @JoinTable(
         name = "subscriptions",
@@ -72,4 +80,3 @@ public class User {
         return themes.stream().map(theme -> theme.getId()).collect(Collectors.toList());
     }
 }
-
