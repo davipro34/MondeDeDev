@@ -1,34 +1,106 @@
-# Monde De Dev Application
-This ReadMe has been to be updated.
 
-## Back
+# Monde De Dev (MDD)
 
-This project run on Java 21.
+## Description
 
-It requires a MySQL database (version 8.3.0 is recommended).
+MDD is a modern web application and social network designed to help developers find jobs through networking, encouraging connections and collaboration among peers with common interests. The application includes a secure back-end and an interactive front-end.
 
-## Front
+## Features
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
+### Back-end
+- **Comment Management**: Full CRUD for comments.
+- **Security**: Integrates Spring Security for authentication and authorization.
+- **CORS Configuration**: Supports cross-origin requests.
+- **OAuth2 Integration**: Secure authentication via OAuth2.
 
-Don't forget to install your node_modules before starting (`npm install`).
+### Front-end
+- **Modern User Interface**: Uses Angular Material for a sleek interface.
+- **Responsive Design**: Adapts to all screen sizes.
+- **Internationalization**: Ready for internationalization with Angular i18n.
+- **Unit Testing**: Integration with Karma and Jasmine for robust tests.
 
-### Development server
-Run `mvn clean install` for back-end installation.
-Run `mvn spring-boot:run` for a back-end dev server. It launch back-end on `http://localhost:8080/`.
+## Installation and Configuration
 
-Run `ng serve` for a front-end dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Prerequisites
+- **Back-end**:
+  - Java 21
+  - Maven
+  - MySQL (or any database compatible with Spring Data JPA)
+- **Front-end**:
+  - Node.js (recommended version: latest LTS)
+  - npm (included with Node.js)
+  - Angular CLI: `npm install -g @angular/cli`
 
-### Build
+### Installation
 
-Run `ng build` to build the front-end of this project. The build artifacts will be stored in the `dist/` directory.
+#### Back-end
+1. Clone the application repository:
+   ```bash
+   git clone https://github.com/davipro34/MondeDeDev
+   cd MondeDeDev/back
+   ```
+2. Configure the database by editing the `src/main/resources/application.properties` file.
+   - Some environment variables need to be set. Refer to the `application.properties` file for details.
+3. Build the application's `.jar` file:
+   ```bash
+   ./mvnw clean install
+   ```
+4. Create the database and tables:
+   - Run the SQL script located at `/assets/db/mdd_db_create_database_v1.7.sql` to create the database, tables, and insert sample data.
+   - Optional: Use Docker to install the database with the `docker-compose.yaml` file located in `/assets/db/`.
 
-### Where to start
+#### Front-end
+1. Clone the application repository:
+   ```bash
+   git clone https://github.com/davipro34/MondeDeDev
+   cd MondeDeDev/front
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-As you may have seen if you already started the app, a simple home page containing a logo, a title and a button is available. If you take a look at its code (in the `home.component.html`) you will see that an external UI library is already configured in the project.
+### Configuration
 
-This library is `@angular/material`, it's one of the most famous in the angular ecosystem. As you can see on their docs (https://material.angular.io/), it contains a lot of highly customizable components that will help you design your interfaces quickly.
+#### Back-end
+- Edit `src/main/resources/application.properties` with your database details and configure the necessary environment variables.
 
-Note: I recommend to use material however it's not mandatory, if you prefer you can get ride of it.
+#### Front-end
+- **Development Environment**: Configure variables in `src/environments/environment.ts`.
+- **Production Environment**: Modify `src/environments/environment.prod.ts`.
 
-Good luck!
+### Starting the Application
+
+#### Back-end
+- Start the application:
+  ```bash
+  java -jar target/mdd-api-0.0.1-SNAPSHOT.jar
+  ```
+
+#### Front-end
+- To start in development mode:
+  ```bash
+  npm start
+  ```
+- To build for production:
+  ```bash
+  npm run build
+  ```
+
+## Technologies Used
+
+### Back-end
+- **Spring Boot**: Framework for microservices.
+- **Spring Security**: Manages authentication and authorization.
+- **Spring Data JPA**: Database integration and entity management.
+- **OAuth2**: Token-based authentication.
+- **Maven**: Dependency management and project building.
+
+### Front-end
+- **Angular**: Framework for dynamic web applications.
+- **Angular Material**: UI component library.
+- **TypeScript**: Typed programming language.
+- **Karma and Jasmine**: Tools for unit testing.
+- **SCSS**: CSS preprocessor.
+
+For more information, refer to the official documentation of the mentioned technologies.
