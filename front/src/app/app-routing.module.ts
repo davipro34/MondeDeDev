@@ -13,7 +13,7 @@ import { UnauthGuard } from './services/UnauthGuard';
 import { AuthGuard } from './services/AuthGuard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [UnauthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
   {

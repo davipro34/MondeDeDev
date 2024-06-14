@@ -54,6 +54,7 @@ export class MeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.themesSubscription = this.sessionService.subscribedThemes$.subscribe(themes => {
       this.subscribedThemes = themes;
+      this.sortSubscribedThemesAlphabetically();
     });
 
     this.userSubscription = this.sessionService.user$.subscribe(user => {
@@ -67,6 +68,10 @@ export class MeComponent implements OnInit, OnDestroy {
         this.formControls['email'].setValue('');
       }
     });
+  }
+
+  private sortSubscribedThemesAlphabetically(): void {
+    this.subscribedThemes.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   /**

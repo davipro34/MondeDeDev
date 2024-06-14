@@ -47,7 +47,7 @@ export class ArticleService {
    * @param sortBy - The criteria to sort by (e.g., 'date', 'title').
    * @param direction - The sort direction ('asc' or 'desc').
    */
-  sortArticles(sortBy: string, direction: string = 'desc'): void {
+  sortArticles(sortBy: string = 'date', direction: string = 'desc'): void {
     if (this._articles.value) {
       switch (sortBy) {
         case 'date':
@@ -57,7 +57,7 @@ export class ArticleService {
           this._articles.value.sort((a: Article, b: Article) => b.title.localeCompare(a.title));
           break;
       }
-
+  
       if (direction === 'asc') {
         this._articles.value.reverse();
       }

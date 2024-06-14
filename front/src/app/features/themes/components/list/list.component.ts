@@ -32,11 +32,16 @@ export class ListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.themesSubscription = this.themeService.getThemes().subscribe(allThemes => {
       this.themes = allThemes;
+      this.sortThemesAlphabetically();
     });
 
     this.sessionService.subscribedThemes$.subscribe(themes => {
       this.subscribedThemeIds = themes.map(theme => theme.id);
     });
+  }
+
+  private sortThemesAlphabetically(): void {
+    this.themes.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   /**

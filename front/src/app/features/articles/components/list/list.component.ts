@@ -42,9 +42,6 @@ export class ListComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.sortBy = params['sort'];
       this.sortDirection = params['direction'];
-      if (!this.sortBy || !this.sortDirection) {
-        this.changeSortOrder('date', 'desc');
-      }
     });
 
     this.articleSubscription = this.sessionService.subscribedThemes$.pipe(
@@ -52,6 +49,7 @@ export class ListComponent implements OnInit, OnDestroy {
       switchMap(() => this.articleService.articles$)
     ).subscribe(articles => {
       this.articles = articles;
+      this.changeSortOrder(this.sortBy || 'date', this.sortDirection || 'desc');
     });
   }
 
