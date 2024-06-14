@@ -1,4 +1,4 @@
-![](https://github.com/davipro34/MondeDeDev/assets/images/logo_mdd.png)
+![](https://github.com/davipro34/MondeDeDev/blob/main/assets/images/logo_mdd.png)
 
 # Monde De Dev (MDD)
 
